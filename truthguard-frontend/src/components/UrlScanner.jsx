@@ -11,7 +11,7 @@ function UrlScanner() {
         try {
 
             const response = await axios.post(
-                "http://localhost:8080/api/scan-url",
+                "http://https://truthguard-backend-5.onrender.com/api/scan-url",
                 url,
                 {
                     headers: {
