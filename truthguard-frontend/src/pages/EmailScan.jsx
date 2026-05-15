@@ -29,11 +29,14 @@ function EmailScan() {
 
         } catch (error) {
 
-            console.log(error);
+            console.error(error);
 
             setLoading(false);
 
-            alert("Backend Connection Failed");
+            alert(
+                error.response?.data?.message ||
+                "Email Scan Failed"
+            );
         }
     };
 

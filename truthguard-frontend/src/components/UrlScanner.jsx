@@ -26,7 +26,9 @@ function UrlScanner() {
 
             console.log(error);
 
-            alert("URL Scan Failed");
+            catch (error) {
+                console.error(error);
+            }
         }
     };
 
