@@ -15,8 +15,8 @@ function UrlScanner() {
                 url,
                 {
                     headers: {
-                        "Content-Type": "text/plain",
-                    },
+                        "Content-Type": "text/plain"
+                    }
                 }
             );
 
@@ -24,7 +24,7 @@ function UrlScanner() {
 
         } catch (error) {
 
-            console.error(error);
+            console.log(error);
 
             alert("URL Scan Failed");
         }
