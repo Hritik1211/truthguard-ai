@@ -7,7 +7,7 @@ function History() {
 
     useEffect(() => {
 
-        axios.get("https://truthguard-backend-5.onrender.com/api/history")
+        axios.get("https://truthguard-backend-5.onrender.com/api")
             .then((res) => {
 
                 setHistory(res.data);
