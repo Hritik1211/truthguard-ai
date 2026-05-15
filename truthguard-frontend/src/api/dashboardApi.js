@@ -1,7 +1,6 @@
 import axios from "axios";
 
-const API = "http://https://"https://truthguard-backend-5.onrender.com/api"/api/dashboard";
-
+const API = "https://truthguard-backend-5.onrender.com/api/dashboard"
 export const getDashboardStats = async () => {
 
   const response = await axios.get(`${API}/stats`);
