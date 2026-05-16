@@ -10,14 +10,13 @@ function UrlScanner() {
     const handleScan = async () => {
 
         if (!url.trim()) {
-            alert("Please enter URL");
+            alert("Please enter a URL");
             return;
         }
 
         try {
 
             setLoading(true);
-            setResult(null);
 
             const response = await API.post(
                 "/scan-url",
@@ -29,18 +28,13 @@ function UrlScanner() {
                 }
             );
 
-            console.log(response.data);
-
             setResult(response.data);
 
         } catch (error) {
 
-            console.log(error);
+            console.error(error);
 
-            alert(
-                error.response?.data?.message ||
-                "URL Scan Failed"
-            );
+            alert("URL Scan Failed");
 
         } finally {
 
@@ -74,87 +68,28 @@ function UrlScanner() {
 
             </button>
 
-            {loading && (
-
-                <div className="mt-6 text-yellow-400 text-xl animate-pulse">
-                    AI is analyzing the URL...
-                </div>
-
-            )}
-
             {result && (
 
-                <div className="mt-10 bg-gray-900 border border-gray-700 p-8 rounded-3xl w-full max-w-3xl shadow-2xl">
+                <div className="mt-10 bg-gray-900 p-8 rounded-3xl w-full max-w-3xl">
 
-                    <div className="flex items-center justify-between mb-6">
+                    <h2 className="text-3xl font-bold mb-6">
+                        Scan Result
+                    </h2>
 
-                        <h2 className="text-3xl font-bold">
-                            Scan Result
-                        </h2>
+                    <div className="text-2xl mb-4">
 
-                        <div
-                            className={`px-5 py-2 rounded-full text-lg font-bold ${
-                                result.scam
-                                    ? "bg-red-500"
-                                    : "bg-green-500"
-                            }`}
-                        >
-
-                            {result.scam ? "SCAM DETECTED" : "SAFE"}
-
-                        </div>
+                        {result.scam
+                            ? "🚨 Scam Detected"
+                            : "✅ Safe URL"}
 
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-
-                        <div className="bg-black p-5 rounded-2xl">
-
-                            <p className="text-gray-400">
-                                Risk Score
-                            </p>
-
-                            <h1 className="text-5xl font-bold text-red-400 mt-2">
-                                {result.risk}%
-                            </h1>
-
-                        </div>
-
-                        <div className="bg-black p-5 rounded-2xl">
-
-                            <p className="text-gray-400">
-                                Scam Category
-                            </p>
-
-                            <h1 className="text-3xl font-bold text-yellow-400 mt-2">
-                                {result.category}
-                            </h1>
-
-                        </div>
-
+                    <div className="text-xl">
+                        Risk Score: {result.risk}%
                     </div>
 
-                    <div>
-
-                        <h3 className="text-2xl font-semibold mb-4">
-                            Threat Indicators
-                        </h3>
-
-                        <ul className="space-y-3">
-
-                            {result.reason?.map((item, index) => (
-
-                                <li
-                                    key={index}
-                                    className="bg-black border border-gray-800 px-4 py-3 rounded-xl"
-                                >
-                                    ⚠️ {item}
-                                </li>
-
-                            ))}
-
-                        </ul>
-
+                    <div className="text-xl mt-3">
+                        Category: {result.category}
                     </div>
 
                 </div>
@@ -162,6 +97,7 @@ function UrlScanner() {
             )}
 
         </div>
+
     );
 }
 
