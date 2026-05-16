@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "axios";
+import API from "../api/scamApi";
 
 function UrlScanner() {
 
@@ -10,7 +10,7 @@ function UrlScanner() {
     const handleScan = async () => {
 
         if (!url.trim()) {
-            alert("Please enter a URL");
+            alert("Please enter URL");
             return;
         }
 
@@ -19,8 +19,8 @@ function UrlScanner() {
             setLoading(true);
             setResult(null);
 
-            const response = await axios.post(
-                "https://truthguard-backend-5.onrender.com/api/scan-url",
+            const response = await API.post(
+                "/scan-url",
                 url,
                 {
                     headers: {
@@ -35,7 +35,7 @@ function UrlScanner() {
 
         } catch (error) {
 
-            console.error(error);
+            console.log(error);
 
             alert(
                 error.response?.data?.message ||
