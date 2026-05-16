@@ -5,20 +5,50 @@ import Dashboard from "./pages/Dashboard";
 import EmailScan from "./pages/EmailScan";
 import ImageScan from "./pages/ImageScan";
 import History from "./pages/History";
-import UrlScanner from "./components/UrlScanner";
+import UrlScanner from "./pages/UrlScanner";
 
 function App() {
+
   return (
+
     <BrowserRouter>
+
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/email" element={<EmailScan />} />
-        <Route path="/image" element={<ImageScan />} />
-        <Route path="/url" element={<UrlScanner />} />
-        <Route path="/history" element={<History />} />
-        <Route path="/dashboard" element={<Dashboard />} />
+
+        <Route
+          path="/"
+          element={<Home />}
+        />
+
+        <Route
+          path="/email"
+          element={<EmailScan />}
+        />
+
+        <Route
+          path="/image"
+          element={<ImageScan />}
+        />
+
+        <Route
+          path="/url"
+          element={<UrlScanner />}
+        />
+
+        <Route
+          path="/history"
+          element={<History />}
+        />
+
+        <Route
+          path="/dashboard"
+          element={<Dashboard />}
+        />
+
       </Routes>
+
     </BrowserRouter>
+
   );
 }
 
