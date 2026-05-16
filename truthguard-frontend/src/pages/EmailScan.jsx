@@ -179,4 +179,4 @@ function UrlScanner() {
     );
 }
 
-export default UrlScanner;
+export default EmailScan;
