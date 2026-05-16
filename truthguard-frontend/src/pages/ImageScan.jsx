@@ -1,16 +1,18 @@
 import { useState } from "react";
 import API from "../api/scamApi";
 
-function UrlScanner() {
+function ImageScan() {
 
-    const [url, setUrl] = useState("");
+    const [file, setFile] = useState(null);
     const [result, setResult] = useState(null);
     const [loading, setLoading] = useState(false);
 
     const handleScan = async () => {
 
-        if (!url.trim()) {
-            alert("Please enter a URL");
+        if (!file) {
+
+            alert("Please select an image");
+
             return;
         }
 
@@ -19,12 +21,16 @@ function UrlScanner() {
             setLoading(true);
             setResult(null);
 
+            const formData = new FormData();
+
+            formData.append("file", file);
+
             const response = await API.post(
-                "/scan-url",
-                url,
+                "/scan-image",
+                formData,
                 {
                     headers: {
-                        "Content-Type": "text/plain"
+                        "Content-Type": "multipart/form-data"
                     }
                 }
             );
@@ -37,10 +43,7 @@ function UrlScanner() {
 
             console.error(error);
 
-            alert(
-                error.response?.data?.message ||
-                "URL Scan Failed"
-            );
+            alert("Image Scan Failed");
 
         } finally {
 
@@ -52,32 +55,31 @@ function UrlScanner() {
 
         <div className="min-h-screen bg-black text-white flex flex-col items-center p-10">
 
-            <h1 className="text-5xl font-bold text-blue-500 mb-8">
-                URL Scam Scanner
+            <h1 className="text-5xl font-bold text-red-500 mb-8">
+                Image Scam Scanner
             </h1>
 
             <input
-                type="text"
-                placeholder="Enter suspicious URL..."
-                className="w-full max-w-3xl p-5 rounded-xl bg-gray-900 border border-gray-700 text-lg"
-                value={url}
-                onChange={(e) => setUrl(e.target.value)}
+                type="file"
+                accept="image/*"
+                onChange={(e) => setFile(e.target.files[0])}
+                className="mb-6 text-lg"
             />
 
             <button
                 onClick={handleScan}
                 disabled={loading}
-                className="mt-6 bg-blue-500 hover:bg-blue-600 px-8 py-3 rounded-xl text-xl font-bold disabled:bg-gray-600"
+                className="bg-red-500 hover:bg-red-600 px-8 py-3 rounded-xl text-xl font-bold"
             >
 
-                {loading ? "Analyzing..." : "Scan URL"}
+                {loading ? "Analyzing..." : "Scan Image"}
 
             </button>
 
             {loading && (
 
                 <div className="mt-6 text-yellow-400 text-xl animate-pulse">
-                    AI is analyzing the URL...
+                    AI is analyzing the image...
                 </div>
 
             )}
@@ -100,7 +102,9 @@ function UrlScanner() {
                             }`}
                         >
 
-                            {result.scam ? "SCAM DETECTED" : "SAFE"}
+                            {result.scam
+                                ? "SCAM DETECTED"
+                                : "SAFE"}
 
                         </div>
 
@@ -162,7 +166,8 @@ function UrlScanner() {
             )}
 
         </div>
+
     );
 }
 
-export default UrlScanner;
+export default ImageScan;
