@@ -13,7 +13,6 @@ function UrlScanner() {
         if (!url.trim()) {
 
             alert("Please enter a URL");
-
             return;
         }
 
@@ -179,4 +178,4 @@ function UrlScanner() {
     );
 }
 
-export default EmailScan;
+export default UrlScanner;
