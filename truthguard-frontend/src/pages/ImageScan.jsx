@@ -5,13 +5,13 @@ function ImageScan() {
 
     const [file, setFile] = useState(null);
     const [result, setResult] = useState(null);
+    const [loading, setLoading] = useState(false);
 
     const handleUpload = async () => {
 
         if (!file) {
 
-            alert("Please select image");
-
+            alert("Please select an image");
             return;
         }
 
@@ -20,6 +20,9 @@ function ImageScan() {
         formData.append("file", file);
 
         try {
+
+            setLoading(true);
+            setResult(null);
 
             const response = await API.post(
                 "/scan-image",
@@ -31,13 +34,22 @@ function ImageScan() {
                 }
             );
 
+            console.log(response.data);
+
             setResult(response.data);
 
         } catch (error) {
 
-            console.log(error);
+            console.error(error);
 
-            alert("Image Scan Failed");
+            alert(
+                error.response?.data?.message ||
+                "Image Scan Failed"
+            );
+
+        } finally {
+
+            setLoading(false);
         }
     };
 
@@ -49,24 +61,34 @@ function ImageScan() {
                 Image Scam Scanner
             </h1>
 
-            <div className="bg-gray-900 border border-gray-700 p-10 rounded-3xl w-full max-w-2xl flex flex-col items-center">
+            <div className="bg-gray-900 border border-gray-700 p-10 rounded-3xl w-full max-w-2xl flex flex-col items-center shadow-2xl">
 
                 <input
                     type="file"
                     accept="image/*"
                     onChange={(e) => setFile(e.target.files[0])}
-                    className="mb-6"
+                    className="mb-6 text-lg"
                 />
 
                 <button
                     onClick={handleUpload}
-                    className="bg-blue-500 hover:bg-blue-600 px-8 py-3 rounded-xl text-xl"
+                    disabled={loading}
+                    className="bg-blue-500 hover:bg-blue-600 px-8 py-3 rounded-xl text-xl font-bold disabled:bg-gray-600"
                 >
-                    Scan Image
+
+                    {loading ? "Analyzing..." : "Scan Image"}
+
                 </button>
 
-            </div>
+                {loading && (
 
+                    <div className="mt-6 text-yellow-400 text-xl animate-pulse">
+                        AI is analyzing the image...
+                    </div>
+
+                )}
+
+            </div>
 
             {result && (
 
@@ -78,11 +100,13 @@ function ImageScan() {
                             Scan Result
                         </h2>
 
-                        <div className={`px-5 py-2 rounded-full text-lg font-bold ${
-                            result.scam
-                                ? "bg-red-500"
-                                : "bg-green-500"
-                        }`}>
+                        <div
+                            className={`px-5 py-2 rounded-full text-lg font-bold ${
+                                result.scam
+                                    ? "bg-red-500"
+                                    : "bg-green-500"
+                            }`}
+                        >
 
                             {result.scam ? "SCAM DETECTED" : "SAFE"}
 
@@ -90,8 +114,7 @@ function ImageScan() {
 
                     </div>
 
-
-                    <div className="grid grid-cols-2 gap-6 mb-8">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
 
                         <div className="bg-black p-5 rounded-2xl">
 
@@ -119,7 +142,6 @@ function ImageScan() {
 
                     </div>
 
-
                     <div>
 
                         <h3 className="text-2xl font-semibold mb-4">
@@ -128,7 +150,7 @@ function ImageScan() {
 
                         <ul className="space-y-3">
 
-                            {result.reason.map((item, index) => (
+                            {result.reason?.map((item, index) => (
 
                                 <li
                                     key={index}

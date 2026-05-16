@@ -9,9 +9,15 @@ function EmailScan() {
 
     const handleScan = async () => {
 
+        if (!emailText.trim()) {
+            alert("Please enter an email message");
+            return;
+        }
+
         try {
 
             setLoading(true);
+            setResult(null);
 
             const response = await API.post(
                 "/scan-email",
@@ -23,20 +29,22 @@ function EmailScan() {
                 }
             );
 
-            setResult(response.data);
+            console.log(response.data);
 
-            setLoading(false);
+            setResult(response.data);
 
         } catch (error) {
 
             console.error(error);
 
-            setLoading(false);
-
             alert(
                 error.response?.data?.message ||
                 "Email Scan Failed"
             );
+
+        } finally {
+
+            setLoading(false);
         }
     };
 
@@ -65,6 +73,14 @@ function EmailScan() {
 
             </button>
 
+            {loading && (
+
+                <div className="mt-6 text-yellow-400 text-xl animate-pulse">
+                    AI is analyzing the email...
+                </div>
+
+            )}
+
             {result && (
 
                 <div className="mt-10 bg-gray-900 border border-gray-700 p-8 rounded-3xl w-full max-w-3xl shadow-2xl">
@@ -89,7 +105,7 @@ function EmailScan() {
 
                     </div>
 
-                    <div className="grid grid-cols-2 gap-6 mb-8">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
 
                         <div className="bg-black p-5 rounded-2xl">
 
@@ -125,7 +141,7 @@ function EmailScan() {
 
                         <ul className="space-y-3">
 
-                            {result.reason.map((item, index) => (
+                            {result.reason?.map((item, index) => (
 
                                 <li
                                     key={index}
